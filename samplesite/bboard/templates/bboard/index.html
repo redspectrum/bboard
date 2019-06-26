@@ -1,26 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Main</title>
-</head>
-<body>
+{% extends "bboard/layout/base.html" %}
 
-<hl>Объявления</hl>
-<a href="/bboard/">Главная</a>
-    {% for rubric in rubrics %}
-
-    <a href="/bboard/{{ rubric.pk }}">{{ rubric.name}}</a>
+{% block content %}
+    {% for bb in bbs %}
+        <div class="b">
+            <h2>{{ bb.title }} </h2>
+            <p> {{ bb.content }} </p>
+                    <a href="{% url 'by_rubric' bb.rubric.pk }}">{{ bb.rubric.name}}</a>
+            <p>{{ bb.published }} </p>
+        </div>
     {% endfor %}
-
-{% for bb in bbs %}
-    <div>
-        <h2>{{ bb.title }} </h2>
-        <p> {{ bb.content }} </p>
-                <a href="/bboard/{{ bb.rubric.pk }}">{{ bb.rubric.name}}</a>
-        <p>{{ bb.published }} </p>
-    </div>
-{% endfor %}
-
-</body>
-</html>
+{% endblock %}
