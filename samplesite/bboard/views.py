@@ -5,9 +5,19 @@ from django.urls import reverse
 from .models import Bb, Rubric
 
 from django.views.generic.edit import CreateView
+from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 
 from .forms import BbForm
+
+
+class BbDetailView(DetailView):
+    model = Bb
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['rubrics'] = Rubric.objects.all()
+        return context
 
 
 class BbCreateView(CreateView):
@@ -23,14 +33,11 @@ class BbCreateView(CreateView):
 
 
 def index(request):
-
     bbs = Bb.objects.all()
     rubrics = Rubric.objects.all()
-
     context = {'bbs': bbs, 'rubrics': rubrics}
 
     return render(request, 'bboard/index.html', context)
-
 
 
 def by_rubric(request, rubric_id):
@@ -51,7 +58,7 @@ def add_and_save(request):
         if bbf.is_valid():
             bbf.save()
             return HttpResponseRedirect(reverse('by_rubric',
-                                                kwargs={'rubric_id': bbf.cleaned_data('rubric').pk}))
+                                                kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
         else:
             context = {'form': bbf}
             return render(request, 'bboard/create.html', context)

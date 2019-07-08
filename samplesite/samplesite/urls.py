@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from .views import redirect_bboard
 
 urlpatterns = [
-    path('bboard/', include('bboard.urls')),
+    path('', redirect_bboard),
+    path('bboard/', include('bboard.urls'), name='bboard'),
     path('admin/', admin.site.urls),
 ]
